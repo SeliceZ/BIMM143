@@ -1,0 +1,118 @@
+---
+title: "Class06_handson1"
+author: "Jiaqian Zhong"
+date: "1/24/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## section 1: reading files again
+
+Here we are going to try using the **read.table()** function and friends to read some example flat files
+
+Files lets try adding a simple plot 
+```{r}
+plot(1:10)
+```
+
+Back to file reading
+```{r}
+file1 <- "https://bioboot.github.io/bimm143_W19/class-material/test1.txt"
+data1<- read.csv(file1,header=TRUE)
+data1
+file2 <- "https://bioboot.github.io/bimm143_W19/class-material/test2.txt"
+data2 <- read.csv(file2, header = TRUE)
+data2
+file3 <- "https://bioboot.github.io/bimm143_W19/class-material/test3.txt"
+data3 <- read.csv(file3, header = TRUE)
+data3
+```
+
+
+##Section 2. R function
+
+
+My first genius function
+
+```{r}
+add <- function(x, y=1) {
+  #Sum of x and y
+  x+y
+}
+```
+
+Lets try this function 
+
+```{r}
+add(1,4)
+add(c(1,2,3))
+add(1)
+```
+
+## You need a “name”, “arguments” and “body”...
+```{r}
+rescale <- function(x) {
+   rng <-range(x)
+   (x - rng[1]) / (rng[2] - rng[1])
+}
+```
+
+
+```{r}
+# Test on a small example where you know the answer
+rescale(1:10)
+# How would you get your function to work here...
+rescale( c(1,2,NA,3,10) )
+# What should your function do here?
+```
+
+```{r}
+rescale2 <- function(x, na.rm=TRUE, plot=FALSE) {
+   if(na.rm) {
+     rng <-range(x, na.rm=TRUE)
+   } else {
+     rng <-range(x)
+   }
+   print("Hello")
+   answer <- (x - rng[1]) / (rng[2] - rng[1])
+   return(answer)
+   print("is it me you are looking for?")
+   if(plot) {
+      plot(answer, typ="b", lwd=4)
+}
+   print("I can see it in ...")
+}
+```
+
+```{r}
+# What should your function do here?
+rescale2( c(1,10,100) )
+```
+##Rescale3
+```{r}
+
+rescale3 <- function(x, na.rm=TRUE, plot=FALSE) {
+   if(na.rm) {
+     rng <-range(x, na.rm=TRUE)
+   } else {
+     rng <-range(x)
+   }
+   print("Hello")
+   answer <- (x - rng[1]) / (rng[2] - rng[1])
+   print("is it me you are looking for?")
+   if(plot) {
+      plot(answer, typ="b", lwd=4)
+}
+   print("I can see it in ...")
+   return(answer)
+}
+```
+
+```{r}
+# What should your function do here?
+rescale3(c(1,10,NA), plot = TRUE)
+```
+
