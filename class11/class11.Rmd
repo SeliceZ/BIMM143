@@ -1,0 +1,70 @@
+---
+title: "Class11: Structural Bioonformatics"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Section 1. The PDB
+```{r}
+stats <- read.csv("Data Export Summary.csv", row.names = 1)
+stats
+```
+Determine the percentage of structures solved by X-Ray and Electron Microscopy.
+```{r}
+
+```
+
+From the website what proportion of structures are protein?
+```{r}
+percent.by.name <- stats$Total/sum(stats$Total)*100
+names(percent.by.name) <- rownames(stats)
+percent.by.name
+sum(stats$Proteins)/sum(stats$Total)*100
+```
+## Section 3. Introduction to Bio3D in R
+First load the package
+```{r}
+library(bio3d)
+```
+
+Now we can use the function from this bio3d package
+```{r}
+pdb <- read.pdb("1hsg")
+pdb
+```
+
+```{r}
+aa321(pdb$atom$resid)
+```
+
+select calpha
+```{r}
+ca.inds <- atom.select(pdb, "calpha")
+ca.inds
+```
+
+select protein
+```{r}
+prot.inds <- atom.select(pdb, "protein")
+```
+
+select ligand
+```{r}
+lig.inds <- atom.select(pdb,"ligand")
+```
+
+Use the Bio3D function to write out a protein only PDB file for viewing in VMD. 
+```{r}
+prot.pdb <- trim.pdb(pdb, prot.inds)
+write.pdb(prot.pdb, file="protein.pdb")
+```
+
+Let's do the same thing for drug
+```{r}
+ligand.pdb <- trim.pdb(pdb, lig.inds)
+write.pdb(ligand.pdb, file = "ligand.pdb")
+```
+
