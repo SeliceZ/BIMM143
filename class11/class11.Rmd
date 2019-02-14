@@ -68,3 +68,7 @@ ligand.pdb <- trim.pdb(pdb, lig.inds)
 write.pdb(ligand.pdb, file = "ligand.pdb")
 ```
 
+```{r}
+library("bio3d.view")
+```
+
