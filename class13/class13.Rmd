@@ -38,3 +38,14 @@ lig
 write.pdb(lig, file = "1hsg_ligand")
 ```
 
+```{r}
+res <- read.pdb("all.pdbqt", multi=TRUE)
+write.pdb(res, "results.pdb")
+```
+
+```{r}
+# res <- read.pdb("all.pdbqt", multi=TRUE) 
+ori <- read.pdb("ligand.pdbqt")
+rmsd(ori, res)
+```
+
