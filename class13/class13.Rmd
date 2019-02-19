@@ -49,3 +49,13 @@ ori <- read.pdb("ligand.pdbqt")
 rmsd(ori, res)
 ```
 
+```{r}
+pdb <- read.pdb("1HEL")
+m <- nma(pdb)
+plot(m)
+```
+
+```{r}
+mktrj(m, mode = 7, file = "nma_7.pdb")
+```
+
