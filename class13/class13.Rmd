@@ -1,0 +1,40 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Prepare Bio3D and load the PDB structure 
+```{r}
+library(bio3d)
+file.name <- get.pdb("1hsg")
+hiv <- read.pdb(file.name)
+hiv
+```
+
+What is the name of the two non protein resid values in this structure? 
+HOH (127), MK1 (1)
+What does resid correspond to and how would you get a listing of all reside values in this structure?
+
+```{r}
+prot <- trim.pdb(hiv, "protein")
+prot
+```
+
+```{r}
+write.pdb(prot, file = "1hsg_protein")
+```
+
+
+```{r}
+lig <- trim.pdb(hiv, "ligand")
+lig
+```
+
+```{r}
+write.pdb(lig, file = "1hsg_ligand")
+```
+
