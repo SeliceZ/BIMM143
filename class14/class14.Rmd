@@ -1,0 +1,50 @@
+---
+title: "Class14"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+##Asthma SNPs in MXL population
+
+Read file from Ensemble
+```{r}
+mxl <- read.csv("373531-SampleGenotypes-Homo_sapiens_Variation_Sample_rs8067378.csv")
+head(mxl)
+```
+
+Counts of genotype
+```{r}
+table(mxl$Genotype..forward.strand.)
+```
+
+## RNA-Seq
+Fastq quality scores
+```{r}
+q <- "DDDDCDEDCDDDDBBDDDCC@=DHIIGIIFJJJIGJIJJJJJJJJJJJJHJJIGIGJJIJIIHHHFHFFFFFCCC"
+library(seqinr)
+library(gtools)
+
+asc(s2c(q))
+```
+##Population scale analysis
+whether there is any association of the 4 asthma-associated SNPs (rs8067378...) on ORMDL3 expression
+```{r}
+geno <- read.table("rs8067378_ENSG00000172057.6.txt")
+```
+```{r}
+table(geno$geno)
+```
+
+```{r}
+summary(geno)
+```
+
+Figures show distribution of these expression values
+```{r}
+boxplot(geno)
+```
+
