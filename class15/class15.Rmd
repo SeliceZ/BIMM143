@@ -1,0 +1,172 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+metadata <- read.csv("Data/airway_metadata.csv", stringsAsFactors = FALSE)
+counts <- read.csv("Data/airway_scaledcounts.csv", stringsAsFactors = FALSE)
+```
+
+```{r}
+dim(counts)
+head(counts)
+```
+
+```{r}
+summary(counts)
+```
+
+
+```{r}
+head(metadata)
+```
+
+```{r}
+colnames(counts)
+```
+
+```{r}
+metadata$id
+```
+Check for correspondence of metadata and countdata
+```{r}
+all(colnames(counts)[-1] == metadata$id)
+```
+
+First task find which columns in **counts** correspond to the control conditions (i.e. no drugs!). Then we calculate the mean in count value
+
+```{r}
+control <- metadata$dex == "control"
+control.ids <- metadata$id[control.inds]
+```
+
+calculate the mean counts of all genes
+```{r}
+control.mean <- rowSums(counts[ ,control.ids])/ ncol(counts[,control.ids])
+names(control.mean) <- counts$ensgene
+head(control.mean)
+```
+
+Now do the same thing for the drug treated sample (i.e. **treated** columns)
+```{r}
+treated <- metadata[metadata[,"dex"] == "treated",]
+treated.mean <- rowSums(counts[,treated$id]/ncol(counts[,treated$id]))
+treated.ids <- metadata$id[control.inds]
+names(treated.mean) <- counts$ensgene
+```
+
+
+```{r}
+meancounts <- data.frame(control.mean, treated.mean)
+```
+
+```{r}
+colSums(meancounts)
+```
+
+```{r}
+plot(meancounts$control.mean, meancounts$treated.mean)
+```
+
+Put this into a log log scale to visualize
+```{r}
+plot(log = "xy", meancounts$control.mean, meancounts$treated.mean)
+```
+
+
+```{r}
+meancounts$log2fc <- log2(meancounts[,"treated.mean"]/meancounts[,"control.mean"])
+head(meancounts) 
+```
+
+```{r}
+toy <- c(1,2,0,4,8)
+toy == 0
+```
+
+find zero entry genes in meancounts
+```{r}
+zero.vals <- which(meancounts[,1:2]==0, arr.ind=TRUE)
+to.rm <- unique(zero.vals[,1])
+```
+
+
+remove zero entry genes from meancounts
+```{r}
+mycounts <- meancounts[-to.rm,]
+head(mycounts)
+dim(mycounts)
+```
+
+```{r}
+up.ind <- mycounts$log2fc > 2
+down.ind <- mycounts$log2fc < (-2)
+```
+
+
+number of up and down regulated genes
+```{r}
+sum(up.ind)
+sum(down.ind)
+```
+
+```{r}
+anno <- read.csv("data/annotables_grch38.csv")
+head(anno)
+```
+
+Use the merge function to add annotation data from ensemble
+```{r}
+mycounts.annotated <- merge(x = mycounts, y = anno, by.x = "row.names", by.y = "ensgene")
+head(mycounts.annotated)
+```
+
+```{r}
+library(DESeq2)
+```
+
+```{r}
+dds <- DESeqDataSetFromMatrix(countData=counts, 
+                              colData=metadata, 
+                              design=~dex, 
+                              tidy=TRUE)
+dds
+
+```
+
+
+```{r}
+dds <- DESeq(dds)
+```
+
+
+```{r}
+result1 <- results(dds, alpha = 0.01)
+head(result1)
+```
+
+
+```{r}
+summary(result1)
+```
+
+plot the result
+
+```{r}
+mycols <- rep("gray", nrow(result1))
+mycols[abs(result1$log2FoldChange) >2]<-"blue" 
+plot(result1$log2FoldChange, -log(result1$padj), col = mycols) 
+```
+
+
+
+```{r}
+
+```
+
+
