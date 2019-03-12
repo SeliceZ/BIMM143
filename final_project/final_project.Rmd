@@ -1,0 +1,44 @@
+---
+title: "final project"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(bio3d)
+```
+
+```{r}
+file <- read.fasta("aln-clustalw.fst")
+file
+
+```
+
+```{r}
+sim <- seqidentity(file, normalize=TRUE, similarity=FALSE, ncore=1, nseg.scale=1)
+sim
+```
+
+```{r}
+# Plot identity matrix
+heatmap(sim, margins = c(11,11))
+```
+
+```{r}
+con <- consensus(file)
+con
+```
+
+```{r}
+pdb <- blast.pdb(con$seq)
+```
+
+
+```{r}
+annotation <- pdb.annotate(pdb$hit.tbl$pdb.id)
+```
+
