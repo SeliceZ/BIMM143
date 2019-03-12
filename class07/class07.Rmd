@@ -1,0 +1,54 @@
+---
+title: "Class07"
+author: "Jiaqian Zhong"
+date: "1/29/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Function revisit
+```{r}
+source("http://tinyurl.com/rescale-R")
+```
+
+lets try the rescale function
+
+
+```{r}
+rescale(c(1,5,10))
+```
+```{r}
+rescale2(c(1:5, "string"))
+```
+
+```{r}
+x <- c(9,3,NA,4,6)
+is.na(x)
+which(is.na(x))
+```
+
+```{r}
+# Lets define an example x and y
+x <- c(1, 2, NA, 3, NA) 
+y <- c(NA, 3, NA, 3, 4)
+y2 <- c(NA)
+# use the is.na() and sum() functions
+is.na(x)
+is.na(y)
+is.na(x)&is.na(y)
+sum( is.na(x) )
+# Putting together!
+sum( is.na(x) & is.na(y) )
+```
+
+```{r}
+both_na(x, y)
+```
+
+```{r}
+both_na(x, y2)
+```
+
